@@ -1,0 +1,31 @@
+{
+  "name": "t4j-backend",
+  "version": "0.0.1",
+  "description": "t4j backend",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RWander/t4j.git"
+  },
+  "keywords": [
+    "t4j"
+  ],
+  "author": "roman.korneyev@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RWander/t4j/issues"
+  },
+  "homepage": "https://github.com/RWander/t4j#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "lodash": "^4.15.0",
+    "mongoose": "^4.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "gulp": "^3.9.1"
+  }
+}

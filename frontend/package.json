@@ -1,0 +1,31 @@
+{
+  "name": "t4j",
+  "version": "0.0.1",
+  "description": "Time For Job",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RWander/t4j.git"
+  },
+  "keywords": [
+    "time4job"
+  ],
+  "author": "roman.korneyev@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RWander/t4j/issues"
+  },
+  "homepage": "https://github.com/RWander/t4j#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "react": "^15.3.1",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-plugin-react": "^6.2.0"
+  }
+}
