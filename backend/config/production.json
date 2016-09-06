@@ -1,0 +1,9 @@
+{
+  "http": {
+    "host": "localhost",
+    "port": "1110"
+  },
+  "db": {
+    "uri": "mongodb://localhost/t4j"
+  }
+}
