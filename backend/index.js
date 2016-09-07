@@ -22,10 +22,6 @@ require('./express')(app);  // express settings
 require('./routes')(app);   // routes
 require('./errors')(app);   // error handlers
 
-if (env !== 'test') {
-  start();
-}
-
 function start(callback) {
   dbConnect()
     .on('error', console.log)
@@ -48,9 +44,11 @@ function listen (callback) {
 }
 
 function dbConnect () {
+  mongoose.Promise = global.Promise;
   const options = { server: { socketOptions: { keepAlive: 1 } } };
   return mongoose.connect(config.get('db').uri, options).connection;
 }
 
 module.exports.start = start;
 module.exports.app = app;
+module.exports.dbConnect = dbConnect;

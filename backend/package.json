@@ -4,7 +4,10 @@
   "description": "t4j backend",
   "main": "index.js",
   "scripts": {
-    "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
+    "lint": "node_modules/eslint/bin/eslint.js . || exit 0",
+    "dev:dbgen": "NODE_ENV=development node --eval \"require('.').dbConnect().once('open', () => require('./db/generator')());\"",
+    "dev:start": "NODE_ENV=development node --eval \"require('.').start();\"",
+    "prod:start": "NODE_ENV=production node --eval \"require('.').start();\""
   },
   "repository": {
     "type": "git",
@@ -30,6 +33,6 @@
   },
   "devDependencies": {
     "eslint": "^3.4.0",
-    "gulp": "^3.9.1"
+    "faker": "^3.1.0"
   }
 }

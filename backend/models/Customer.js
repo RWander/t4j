@@ -9,11 +9,16 @@ const Customer = new Schema({
   }
 });
 
-Customer.statics.create = function(data) {
+/**
+ * Creates a new Customer instance.
+ * @param  {String} name
+ * @return {Promise}
+ */
+Customer.statics.create = function(name) {
   const self = this;
 
   return new Promise(function(resolve, reject) {
-    const customer = new self(data);
+    const customer = new self({name: name});
     customer.save(function(err) {
       if (err) return reject(err);
       resolve(customer);
@@ -21,4 +26,4 @@ Customer.statics.create = function(data) {
   });
 };
 
-mongoose.model('customer', Customer);
+mongoose.model('customers', Customer);
