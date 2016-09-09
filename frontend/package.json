@@ -4,6 +4,7 @@
   "description": "Time For Job",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
   },
   "repository": {
