@@ -8,15 +8,15 @@ const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
 
-const isDeveloping = process.env.NODE_ENV !== 'production';
-const port = isDeveloping ? 3000 : process.env.PORT;
+const isDev = process.env.NODE_ENV !== 'production';
+const port = isDev ? 3000 : process.env.PORT;
 const app = express();
 
 // View engine (server rendering)
 // app.set('view engine', 'js');
 // app.engine('js', reactViews.createEngine());
 
-if (isDeveloping) {
+if (isDev) {
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -45,8 +45,6 @@ if (isDeveloping) {
 }
 
 app.listen(port, '0.0.0.0', function onStart(err) {
-  if (err) {
-    console.log(err);
-  }
-  console.info('==> Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+  if (err) console.log(err);
+  console.info(`Listening on port ${port}. Open up http://0.0.0.0:${port}/ in your browser.`);
 });
