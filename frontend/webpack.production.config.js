@@ -38,6 +38,11 @@ module.exports = {
     })
   ],
   module: {
+    preLoaders:	[{
+      test:	/\.js$/,
+      loaders: ['eslint'],
+      exclude: /node_modules/,
+    }],    
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
