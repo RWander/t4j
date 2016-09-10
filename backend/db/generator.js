@@ -4,6 +4,7 @@
 
 const _ = require('lodash');
 const faker = require('faker');
+const moment = require('moment');
 const mongoose = require('mongoose');
 const Doer = mongoose.model('doers');
 const Customer = mongoose.model('customers');
@@ -107,8 +108,6 @@ function createJobs() {
       };
     }
 
-    debugger;
-
     // save to db
     Promise.all(
       jobs.map(job => Job.create(job))
@@ -142,11 +141,21 @@ function createResponses(responsed) {
   for (let i = 0; i < responsed; i++) {
     let doer = gDoers[faker.random.number({min:1, max:gDoers.length}) - 1]; // dubs possible
 
+    let discussion = [];
+    let postedAt = new moment(faker.date.recent());
+    for(let i = 0; i < faker.random.number(10); i++) {
+      discussion[i] = {
+        text: faker.lorem.paragraph(),
+        postedAt: postedAt.add(10, 'm').toDate(),
+        isDoer: faker.random.boolean(),
+      };
+    }
+
     responses[i] = {
       text: faker.lorem.paragraph(),
       postedBy: doer._id,
       postedAt: faker.date.recent(),
-      discussion: [] // TODO
+      discussion: discussion
     };
   }
 
