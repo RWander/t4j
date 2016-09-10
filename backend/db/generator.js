@@ -2,10 +2,16 @@
 
 /* eslint-disable no-console */
 
+const _ = require('lodash');
 const faker = require('faker');
 const mongoose = require('mongoose');
 const Doer = mongoose.model('doers');
 const Customer = mongoose.model('customers');
+const Job = mongoose.model('jobs');
+
+let gDoers;
+let gCustomers;
+let gJobs;
 
 function generate() {
   mongoose.connection.db.dropDatabase(function(err) {
@@ -13,7 +19,7 @@ function generate() {
 
     createDoers()
       .then(createCustomers)
-      //.then(createJobs)
+      .then(createJobs)
       .then(() => mongoose.connection.close())
       .catch(console.log);
   });
@@ -37,14 +43,17 @@ function createDoers() {
           console.log(`Doer ${doer.name} is created.`);
         });
         console.log(`Total doers: ${doers.length}.`);
-        resolve(doers);
+
+        gDoers = doers;
+        resolve();
       },
       err => reject(err)
     );
+
   });
 }
 
-function createCustomers(doers) {
+function createCustomers() {
   return new Promise(function(resolve, reject) {
     const customers = [];
     for (let i = 0; i < 20; i++) {
@@ -62,16 +71,86 @@ function createCustomers(doers) {
           console.log(`Customer ${customer.name} is created.`);
         });
         console.log(`Total customer: ${customers.length}.`);
-        resolve(customers);
+
+        gCustomers = customers;
+        resolve();
       },
       err => reject(err)
     );
+
   });
 }
 
-// function createJobs(customers) {
-//   return new Promise(function(resolve, reject) {
-//   });
-// }
+function createJobs() {
+  return new Promise(function(resolve, reject) {
+    const jobs = [];
+    const allTags = createTags();
+
+    for (let i = 0; i < 100; i++) {
+      const customer = gCustomers[faker.random.number(gCustomers.length - 1)];
+
+      const tags = [];
+      for(let i = 0; i < faker.random.number(8); i++) {
+        tags[i] = allTags[faker.random.number({min:1, max:allTags.length}) - 1];
+      }
+
+      const responsed = faker.random.number(10);
+
+      jobs[i] = {
+        summary: faker.lorem.paragraph(),
+        postedAt: faker.date.recent(),
+        postedBy: customer._id,
+        tags: tags,
+        watched: faker.random.number(200),
+        responsed: responsed,
+        responses: createResponses(responsed)
+      };
+    }
+
+    debugger;
+
+    // save to db
+    Promise.all(
+      jobs.map(job => Job.create(job))
+    ).then(
+      jobs => {
+        jobs.forEach(doer => {
+          console.log(`Job ${doer.name} is created.`);
+        });
+        console.log(`Total jobs: ${jobs.length}.`);
+        resolve(jobs);
+      },
+      err => reject(err)
+    );
+
+  });
+}
+
+function createTags() {
+  let allTags = [];
+  for(let i = 0; i < faker.random.number({min:100, max:200}); i++) {
+    allTags[i] = faker.lorem.word();
+  }
+  allTags = _.uniq(allTags);
+  return allTags;
+}
+
+function createResponses(responsed) {
+  if (responsed === 0) return [];
+
+  const responses = [];
+  for (let i = 0; i < responsed; i++) {
+    let doer = gDoers[faker.random.number({min:1, max:gDoers.length}) - 1]; // dubs possible
+
+    responses[i] = {
+      text: faker.lorem.paragraph(),
+      postedBy: doer._id,
+      postedAt: faker.date.recent(),
+      discussion: [] // TODO
+    };
+  }
+
+  return responses;
+}
 
 module.exports = generate;
