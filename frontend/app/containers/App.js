@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './App.css';
+import User from '../components/User';
+import Data from '../components/Data';
 
 class App extends React.Component {
   static propTypes() {
@@ -16,12 +17,8 @@ class App extends React.Component {
 
     return (
       <div>
-        <div className={ styles.app }>
-          Привет, { name }!
-        </div>
-        <div>
-          { title }
-        </div>
+        <User name={name} />
+        <Data title={title} />
       </div>
     );
   }
