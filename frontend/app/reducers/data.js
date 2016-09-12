@@ -2,6 +2,14 @@ const	initialState =	{
   title: 'Важная информация'
 };
 
-export default function data(state = initialState) {
-  return state;
+export default function data(state = initialState, action) {
+
+  switch (action.type) {
+  case 'SET_DATA':
+    return {...state, title: action.payload};
+
+  default:
+    return state;
+  }
+
 }
