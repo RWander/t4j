@@ -1,3 +1,5 @@
+import { SET_DATA } from '../constants/Data';
+
 const	initialState =	{
   title: 'Важная информация'
 };
@@ -5,7 +7,7 @@ const	initialState =	{
 export default function data(state = initialState, action) {
 
   switch (action.type) {
-  case 'SET_DATA':
+  case SET_DATA:
     return {...state, title: action.payload};
 
   default:
