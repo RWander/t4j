@@ -4,7 +4,9 @@ export default class Data extends React.Component {
   static propTypes() {
     return {
       title: React.PropTypes.string.isRequired,
-      setData: React.PropTypes.func.isRequired
+      fetching: React.PropTypes.bool.isRequired,
+      setData: React.PropTypes.func.isRequired,
+      setDataAsync: React.propTypes.func.isRequired
     };
   }
 
@@ -12,13 +14,18 @@ export default class Data extends React.Component {
     this.props.setData(Date.now());
   }
 
+  onClickAsync(e) {
+    this.props.setDataAsync();
+  }
+
   render() {
-    const { title } = this.props;
+    const { title, fetching } = this.props;
 
     return (
       <div>
-        { title }
+        { fetching ? 'Загрузка..' : title }
         <button onClick={::this.onClick}>Генерировать</button>
+        <button onClick={::this.onClickAsync}>Генерировать Async</button>
       </div>
     );
   }
