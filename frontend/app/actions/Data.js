@@ -1,7 +1,12 @@
+import 'whatwg-fetch';
+
 import {
   SET_DATA,
   GET_ASYNC_DATA_REQUEST,
-  GET_ASYNC_DATA_SUCCESS
+  GET_ASYNC_DATA_SUCCESS,
+  PING_BACKEND_REQUEST,
+  PING_BACKEND_SUCCESS,
+  PING_BACKEND_FAIL
 } from '../constants/Data';
 
 export function setData(title) {
@@ -28,4 +33,28 @@ export function setDataAsync() {
     }, 1000);
   };
 
+}
+
+export function pingBackend() {
+
+  return (dispatch) => {
+    dispatch({
+      type: PING_BACKEND_REQUEST
+    });
+
+    fetch('http://ya.ru')
+      .then(function(response) {
+        dispatch({
+          type: PING_BACKEND_SUCCESS,
+          payload: response
+        });
+      }).catch(function(ex) {
+        dispatch({
+          type: PING_BACKEND_FAIL,
+          payload: ex,
+          error: true
+        });
+      });
+  };
+  
 }

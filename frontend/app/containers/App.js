@@ -17,12 +17,12 @@ class App extends React.Component {
   render() {
     const { name } = this.props.user;
     const { title, fetching } = this.props.data;
-    const { setData, setDataAsync } = this.props.dataActions;
+    const { setData, setDataAsync, pingBackend } = this.props.dataActions;
 
     return (
       <div>
         <User name={name} />
-        <Data title={title} fetching={fetching} setData={setData} setDataAsync={setDataAsync} />
+        <Data title={title} fetching={fetching} setData={setData} setDataAsync={setDataAsync} pingBackend={pingBackend} />
       </div>
     );
   }

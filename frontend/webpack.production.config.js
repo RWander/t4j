@@ -8,6 +8,7 @@ var StatsPlugin = require('stats-webpack-plugin');
 
 module.exports = {
   entry: [
+    'whatwg-fetch',
     path.join(__dirname, 'app/index.js')
   ],
   output: {
