@@ -18,7 +18,7 @@ export default class Data extends React.Component {
     return (
       <div>
         { title }
-        <button onClick={this.onClick.bind(this)}>Генерировать</button>
+        <button onClick={::this.onClick}>Генерировать</button>
       </div>
     );
   }
