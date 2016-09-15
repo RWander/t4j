@@ -42,19 +42,31 @@ export function pingBackend() {
       type: PING_BACKEND_REQUEST
     });
 
-    fetch('http://ya.ru')
-      .then(function(response) {
+    _backendGET(
+      'ping',
+      // success
+      res => {
         dispatch({
           type: PING_BACKEND_SUCCESS,
-          payload: response
+          payload: res.data
         });
-      }).catch(function(ex) {
+      },
+      // fail
+      err => {
         dispatch({
           type: PING_BACKEND_FAIL,
-          payload: ex,
+          payload: err,
           error: true
         });
-      });
+      }
+    );
   };
-  
+
+}
+
+function _backendGET(serverMethod, success, fail) {
+  return fetch(`http://127.0.0.1:1111/${serverMethod}`)
+    .then(response => response.json())
+    .then(success)
+    .catch(fail);
 }

@@ -4,8 +4,7 @@ var fs = require('fs');
 
 module.exports = function (app) {
   app.get('/ping', function(req, res) {
-    res.setHeader('Content-Type', 'text/plain');
-    res.send('pong!');
+    res.json({data: Date.now()});
   });
 
   fs.readdirSync(__dirname).forEach(function(file) {
