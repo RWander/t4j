@@ -1,8 +1,12 @@
 'use strict';
 
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const _ = require('lodash');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const config = require(`./config/${NODE_ENV}`);
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -25,9 +29,7 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
+    new webpack.DefinePlugin(_.merge({ NODE_ENV: JSON.stringify(NODE_ENV) }, config))
   ],
   module: {
     preLoaders:	[{

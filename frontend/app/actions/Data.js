@@ -1,3 +1,5 @@
+/* global BACKEND */
+
 import 'whatwg-fetch';
 
 import {
@@ -65,7 +67,7 @@ export function pingBackend() {
 }
 
 function _backendGET(serverMethod, success, fail) {
-  return fetch(`http://127.0.0.1:1111/${serverMethod}`)
+  return fetch(`${BACKEND}/${serverMethod}`)
     .then(response => response.json())
     .then(success)
     .catch(fail);
