@@ -1,6 +1,4 @@
-/* global BACKEND */
-
-import 'whatwg-fetch';
+import { backendGET } from '../helpers/http';
 
 import {
   SET_DATA,
@@ -50,15 +48,16 @@ function _backendGET(serverMethod, requestType, successType, failType) {
       type: requestType
     });
 
-    return fetch(`${BACKEND}/${serverMethod}`)
-      .then(res => res.json())
-      .then(res => {
+    backendGET(serverMethod,
+      // success
+      res => {
         dispatch({
           type: successType,
           payload: res.data
         });
-      })
-      .catch(err => {
+      },
+      // fail
+      err => {
         dispatch({
           type: failType,
           payload: err,
@@ -68,10 +67,3 @@ function _backendGET(serverMethod, requestType, successType, failType) {
   };
 
 }
-
-// function _backendGET(serverMethod, success, fail) {
-//   return fetch(`${BACKEND}/${serverMethod}`)
-//     .then(response => response.json())
-//     .then(success)
-//     .catch(fail);
-// }

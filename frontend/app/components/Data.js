@@ -13,6 +13,7 @@ export default class Data extends React.Component {
     };
   }
 
+  // TODO: remove after server rendering impl
   componentDidMount() {
     this.props.loadData();
   }
