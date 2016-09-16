@@ -1,15 +1,10 @@
 /* eslint no-console: 0 */
 
 const express = require('express');
-//const reactViews = require('express-react-views');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const port = isDev ? 3000 : process.env.PORT;
 const app = express();
-
-// View engine (server rendering)
-// app.set('view engine', 'js');
-// app.engine('js', reactViews.createEngine());
 
 const expressConfig = require(isDev ? './express' : './express.production');
 const getHtmlContent = expressConfig.getHtmlContent;
@@ -18,8 +13,9 @@ const getHtmlContent = expressConfig.getHtmlContent;
 expressConfig.configure(app);
 
 // routes
-app.get('*', function response(req, res) {
-  res.write(getHtmlContent('dist/index.html'));
+app.get('/', function response(req, res) {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.write(getHtmlContent());
   res.end();
 });
 

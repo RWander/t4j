@@ -1,30 +1,51 @@
 'use strict';
 
-const path = require('path');
-const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('./webpack.config.js');
+const express = require('express');
 
-const compiler = webpack(config);
-const middleware = webpackMiddleware(compiler, {
-  publicPath: config.output.publicPath,
-  contentBase: 'src',
-  stats: {
-    colors: true,
-    hash: false,
-    timings: true,
-    chunks: false,
-    chunkModules: false,
-    modules: false
-  }
-});
+const React = require('react');
+const renderToString = require('react-dom/server').renderToString;
+const Provider = require('react-redux').Provider;
+const App = require('./app/containers/App').default;
+const configureStore = require('./app/store/configureStore').default;
 
 module.exports.configure = function (app) {
-  app.use(middleware);
-  app.use(webpackHotMiddleware(compiler));
+  app.use(express.static(__dirname + '/dist'));
 };
 
-module.exports.getHtmlContent = function (file) {
-  return middleware.fileSystem.readFileSync(path.join(__dirname, file));
+module.exports.getHtmlContent = function () {
+  // Create a new Redux store instance
+  const store = configureStore();
+
+  // Render the component to a string
+  const html = renderToString(
+    //<Provider store={store}><App /></Provider>
+    React.createElement(
+      Provider,
+      { store: store },
+      React.createElement(App, null)
+  ));
+
+  // Grab the initial state from our Redux store
+  const preloadedState = store.getState();
+
+  // Send the rendered page back to the client
+  return renderFullPage(html, preloadedState);
 };
+
+function renderFullPage(html, preloadedState) {
+  return `
+    <!doctype html>
+    <html>
+      <head>
+        <title>Redux Universal Example</title>
+      </head>
+      <body>
+        <div id="root">${html}</div>
+        <script>
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
+        </script>
+        <script src="/main.js"></script>
+      </body>
+    </html>
+    `;
+}

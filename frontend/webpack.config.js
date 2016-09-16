@@ -3,7 +3,6 @@
 const _ = require('lodash');
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const config = require(`./config/${NODE_ENV}`);
@@ -12,7 +11,7 @@ module.exports = {
   devtool: 'eval-source-map',
   entry: [
     'whatwg-fetch',
-    'webpack-hot-middleware/client?reload=true',
+    //'webpack-hot-middleware/client?reload=true',
     path.join(__dirname, 'app/index.js')
   ],
   output: {
@@ -21,11 +20,6 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: 'app/index.tpl.html',
-      inject: 'body',
-      filename: 'index.html'
-    }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
