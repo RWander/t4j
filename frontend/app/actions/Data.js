@@ -8,7 +8,10 @@ import {
   GET_ASYNC_DATA_SUCCESS,
   PING_BACKEND_REQUEST,
   PING_BACKEND_SUCCESS,
-  PING_BACKEND_FAIL
+  PING_BACKEND_FAIL,
+  LOAD_DATA_REQUEST,
+  LOAD_DATA_SUCCESS,
+  LOAD_DATA_FAIL
 } from '../constants/Data';
 
 export function setData(title) {
@@ -37,38 +40,38 @@ export function setDataAsync() {
 
 }
 
-export function pingBackend() {
+export const pingBackend = () => _backendGET('ping', PING_BACKEND_REQUEST, PING_BACKEND_SUCCESS, PING_BACKEND_FAIL);
+export const loadData = () => _backendGET('data', LOAD_DATA_REQUEST, LOAD_DATA_SUCCESS, LOAD_DATA_FAIL);
+
+function _backendGET(serverMethod, requestType, successType, failType) {
 
   return (dispatch) => {
     dispatch({
-      type: PING_BACKEND_REQUEST
+      type: requestType
     });
 
-    _backendGET(
-      'ping',
-      // success
-      res => {
+    return fetch(`${BACKEND}/${serverMethod}`)
+      .then(res => res.json())
+      .then(res => {
         dispatch({
-          type: PING_BACKEND_SUCCESS,
+          type: successType,
           payload: res.data
         });
-      },
-      // fail
-      err => {
+      })
+      .catch(err => {
         dispatch({
-          type: PING_BACKEND_FAIL,
+          type: failType,
           payload: err,
           error: true
         });
-      }
-    );
+      });
   };
 
 }
 
-function _backendGET(serverMethod, success, fail) {
-  return fetch(`${BACKEND}/${serverMethod}`)
-    .then(response => response.json())
-    .then(success)
-    .catch(fail);
-}
+// function _backendGET(serverMethod, success, fail) {
+//   return fetch(`${BACKEND}/${serverMethod}`)
+//     .then(response => response.json())
+//     .then(success)
+//     .catch(fail);
+// }
