@@ -24,7 +24,7 @@ const options = {
     new webpack.optimize.OccurenceOrderPlugin(),
     //new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin(_.merge({ NODE_ENV: JSON.stringify(NODE_ENV) }, config))
+    new webpack.DefinePlugin(_.merge({ 'process.env.NODE_ENV': JSON.stringify(NODE_ENV) }, config))
   ],
   module: {
     preLoaders:	[{
@@ -54,7 +54,7 @@ const options = {
 };
 
 if (NODE_ENV === 'production') {
-  options.plugins[options.plugins.length - 1] = new webpack.optimize.UglifyJsPlugin({
+  options.plugins[options.plugins.length] = new webpack.optimize.UglifyJsPlugin({
     compressor: {
       warnings: false,
       screw_ie8: true

@@ -6,6 +6,7 @@ const React = require('react');
 const renderToString = require('react-dom/server').renderToString;
 const Provider = require('react-redux').Provider;
 const App = require('./app/containers/App').default;
+const DevTools = require('./app/containers/_DevTools').default;
 const configureStore = require('./app/store/configureStore').default;
 const { LOAD_DATA_SUCCESS } = require('./app/constants/Data');
 
@@ -24,12 +25,18 @@ module.exports.getHtmlContent = function (data) {
 
   // Render the component to a string
   const html = renderToString(
-    //<Provider store={store}><App /></Provider>
+    // <Provider store={store}><div><App /><DevTools /></div></Provider>
     React.createElement(
       Provider,
       { store: store },
-      React.createElement(App, null)
-  ));
+      React.createElement(
+        'div',
+        null,
+        React.createElement(App, null),
+        process.env.NODE_ENV !== 'production' ? React.createElement(DevTools, null) : null
+      )
+    )
+  );
 
   // Grab the initial state from our Redux store
   const preloadedState = store.getState();

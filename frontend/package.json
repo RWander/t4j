@@ -6,6 +6,7 @@
   "scripts": {
     "test": "",
     "start": "babel-node .",
+    "prod:start": "PORT=1102 NODE_ENV=production babel-node .",
     "dev:build": "rm -rf dist && NODE_ENV=development webpack --config ./webpack.config.js --progress --profile --colors",
     "prod:build": "rm -rf dist && NODE_ENV=production webpack --config ./webpack.config.js --progress --profile --colors",
     "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
@@ -58,6 +59,9 @@
     "postcss-loader": "^0.13.0",
     "react-addons-test-utils": "^15.3.1",
     "react-transform-hmr": "^1.0.0",
+    "redux-devtools": "^3.3.1",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11",
     "rimraf": "^2.4.3",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",

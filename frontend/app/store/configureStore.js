@@ -1,20 +1,7 @@
-import { createStore, applyMiddleware	} from 'redux';
-import rootReducer from '../reducers';
-import thunk from 'redux-thunk';
-
-export default function configureStore(initialState)	{
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(thunk)
-  );
-
-  if (module.hot) {
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer	= require('../reducers');
-      store.replaceReducer(nextRootReducer);
-    });
-  }
-
-  return store;
+// Use DefinePlugin (Webpack) or loose-envify (Browserify)
+// together with Uglify to strip the dev branch in prod build.
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./configureStore.prod');
+} else {
+  module.exports = require('./configureStore.dev');
 }
