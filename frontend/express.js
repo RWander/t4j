@@ -7,14 +7,20 @@ const renderToString = require('react-dom/server').renderToString;
 const Provider = require('react-redux').Provider;
 const App = require('./app/containers/App').default;
 const configureStore = require('./app/store/configureStore').default;
+const { LOAD_DATA_SUCCESS } = require('./app/constants/Data');
 
 module.exports.configure = function (app) {
   app.use(express.static(__dirname + '/dist'));
 };
 
-module.exports.getHtmlContent = function () {
+module.exports.getHtmlContent = function (data) {
   // Create a new Redux store instance
   const store = configureStore();
+
+  store.dispatch({
+    type: LOAD_DATA_SUCCESS,
+    payload: data
+  });
 
   // Render the component to a string
   const html = renderToString(
