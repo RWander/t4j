@@ -7,7 +7,7 @@
     "test": "",
     "start": "babel-node .",
     "dev:build": "rm -rf dist && NODE_ENV=development webpack --config ./webpack.config.js --progress --profile --colors",
-    "build": "rm -rf dist && NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "prod:build": "rm -rf dist && NODE_ENV=production webpack --config ./webpack.config.js --progress --profile --colors",
     "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
   },
   "repository": {

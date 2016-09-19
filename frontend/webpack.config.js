@@ -3,11 +3,12 @@
 const _ = require('lodash');
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const config = require(`./config/${NODE_ENV}`);
 
-module.exports = {
+const options = {
   devtool: 'eval-source-map',
   entry: [
     'whatwg-fetch',
@@ -21,7 +22,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
+    //new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin(_.merge({ NODE_ENV: JSON.stringify(NODE_ENV) }, config))
   ],
@@ -36,14 +37,29 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel',
       query: {
-        'presets': ['react', 'es2015', 'stage-0', 'react-hmre']
+        'presets': ['react', 'es2015', 'stage-0']
       }
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, {
       test: /\.css$/,
-      loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+      //loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
     }]
-  }
+  },
+  postcss: [
+    require('autoprefixer')
+  ]
 };
+
+if (NODE_ENV === 'production') {
+  options.plugins[options.plugins.length - 1] = new webpack.optimize.UglifyJsPlugin({
+    compressor: {
+      warnings: false,
+      screw_ie8: true
+    }
+  });
+}
+
+module.exports = options;
