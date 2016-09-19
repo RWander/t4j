@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "",
-    "start": "node .",
-    "build": "rm -rf dist && NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "start": "babel-node .",
+    "dev:build": "rm -rf dist && NODE_ENV=development webpack --config ./webpack.config.js --progress --profile --colors",
+    "prod:build": "rm -rf dist && NODE_ENV=production webpack --config ./webpack.config.js --progress --profile --colors",
     "lint": "node_modules/eslint/bin/eslint.js . || exit 0"
   },
   "repository": {
@@ -25,6 +26,7 @@
   "dependencies": {
     "express": "^4.14.0",
     "express-react-views": "^0.10.2",
+    "node-fetch": "^1.6.1",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
     "react-redux": "^4.4.5",
@@ -50,7 +52,6 @@
     "eslint-plugin-react": "^6.2.1",
     "express": "^4.13.3",
     "extract-text-webpack-plugin": "^1.0.1",
-    "html-webpack-plugin": "^2.22.0",
     "jscs": "^3.0.7",
     "jsdom": "^9.4.0",
     "json-loader": "^0.5.3",
@@ -69,7 +70,8 @@
   "babel": {
     "presets": [
       "es2015",
-      "react"
+      "react",
+      "stage-0"
     ]
   }
 }

@@ -13,10 +13,6 @@ export default class Data extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.loadData();
-  }
-
   onClick(e) {
     this.props.setData(Date.now());
   }
