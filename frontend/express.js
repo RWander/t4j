@@ -2,63 +2,22 @@
 
 const express = require('express');
 
-const React = require('react');
-const renderToString = require('react-dom/server').renderToString;
-const Provider = require('react-redux').Provider;
-const App = require('./app/containers/App').default;
-const DevTools = require('./app/containers/_DevTools').default;
-const configureStore = require('./app/store/configureStore').default;
-const { LOAD_DATA_SUCCESS } = require('./app/constants/Data');
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 module.exports.configure = function (app) {
-  app.use(express.static(__dirname + '/dist'));
+  if (NODE_ENV === 'production') {
+    // production
+    app.use(express.static(__dirname + '/dist'));
+  } else {
+    // development, test
+    const webpack = require('webpack');
+    const webpackDevMiddleware = require('webpack-dev-middleware');
+    const webpackConfig = require('./webpack.config');
+    app.use(webpackDevMiddleware(webpack(webpackConfig), {
+      publicPath: '/',
+      stats: {
+        colors: true
+      }
+    }));
+  }
 };
-
-module.exports.getHtmlContent = function (data) {
-  // Create a new Redux store instance
-  const store = configureStore();
-
-  store.dispatch({
-    type: LOAD_DATA_SUCCESS,
-    payload: data
-  });
-
-  // Render the component to a string
-  const html = renderToString(
-    // <Provider store={store}><div><App /><DevTools /></div></Provider>
-    React.createElement(
-      Provider,
-      { store: store },
-      React.createElement(
-        'div',
-        null,
-        React.createElement(App, null),
-        process.env.NODE_ENV !== 'production' ? React.createElement(DevTools, null) : null
-      )
-    )
-  );
-
-  // Grab the initial state from our Redux store
-  const preloadedState = store.getState();
-
-  // Send the rendered page back to the client
-  return renderFullPage(html, preloadedState);
-};
-
-function renderFullPage(html, preloadedState) {
-  return `
-    <!doctype html>
-    <html>
-      <head>
-        <title>Redux Universal Example</title>
-      </head>
-      <body>
-        <div id="root">${html}</div>
-        <script>
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
-        </script>
-        <script src="/main.js"></script>
-      </body>
-    </html>
-    `;
-}
