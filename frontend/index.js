@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 
 const express = require('express');
-const { getInitData, getHtml } = require('./indexRender');
+const { getInitData, returnResponse } = require('./indexRender');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const port = isDev ? 3000 : process.env.PORT;
@@ -12,18 +12,12 @@ require('./express').configure(app);
 
 // routes
 app.get('/',
-  function(req, res, next) {
-    getInitData((err, data) => {
-      if (err) next(err);
-      req.data = data;
-      next();
-    });
-  },
-  function response(req, res) {
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.write(getHtml(req.data));
-    res.end();
-  }
+  (req, res, next) => getInitData((err, data) => {
+    if (err) next(err);
+    req.data = data;
+    next();
+  }),
+  (req, res) => returnResponse(req, res, req.data)
 );
 
 app.listen(port, '0.0.0.0', function onStart(err) {
