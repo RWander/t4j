@@ -20,6 +20,9 @@ app.get('/',
   (req, res) => returnResponse(req, res, req.data)
 );
 
+// error handlers
+require('./errors')(app);
+
 app.listen(port, '0.0.0.0', function onStart(err) {
   if (err) console.log(err);
   console.info(`Listening on port ${port}. Open up http://0.0.0.0:${port}/ in your browser.`);
