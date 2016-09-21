@@ -67,6 +67,8 @@ module.exports.returnResponse = function (req, res, data) {
           </body>
         </html>`
       );
+    } else {
+      res.status(404).send('Not Found');
     }
   });
 };

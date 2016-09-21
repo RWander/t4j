@@ -11,7 +11,7 @@ const app = express();
 require('./express').configure(app);
 
 // routes
-app.get('/',
+app.get('*',
   (req, res, next) => getInitData((err, data) => {
     if (err) next(err);
     req.data = data;
